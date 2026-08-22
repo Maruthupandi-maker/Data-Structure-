@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *left, *right;
+};
+
+struct Node* insert(struct Node *root, int x) {
+    if (root == NULL) {
+        root = malloc(sizeof(struct Node));
+        root->data = x;
+        root->left = root->right = NULL;
+        return root;
+    }
+
+    if (x < root->data)
+        root->left = insert(root->left, x);
+    else
+        root->right = insert(root->right, x);
+
+    return root;
+}
+
+int search(struct Node *root, int x) {
+    if (root == NULL)
+        return 0;
+
+    if (root->data == x)
+        return 1;
+
+    if (x < root->data)
+        return search(root->left, x);
+
+    return search(root->right, x);
+}
+
+int minimum(struct Node *root) {
+    while (root->left)
+        root = root->left;
+    return root->data;
+}
+
+int maximum(struct Node *root) {
+    while (root->right)
+        root = root->right;
+    return root->data;
+}
+
+int main() {
+    struct Node *root = NULL;
+    int n, x, key, i;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter elements: ");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &x);
+        root = insert(root, x);
+    }
+
+    printf("Enter element to search: ");
+    scanf("%d", &key);
+
+    if (search(root, key))
+        printf("Element found\n");
+    else
+        printf("Element not found\n");
+
+    printf("Minimum = %d\n", minimum(root));
+    printf("Maximum = %d\n", maximum(root));
+
+    return 0;
+}
